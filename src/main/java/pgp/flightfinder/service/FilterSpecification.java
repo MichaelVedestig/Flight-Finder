@@ -22,10 +22,13 @@ public class FilterSpecification<T> {
                     .get(airport.getFilterBy()),
                     airport.getValue()));
 
-
             for(SearchRequestDTO requestDto : searchRequestDTOList){
 
                 switch (requestDto.getOperation()) {
+                    case NOT_EQUAL -> {
+                        Predicate notEqual = criteriaBuilder.notEqual(root.join(requestDto.getJoinTable()).get(requestDto.getFilterBy()), requestDto.getValue());
+                        predicateList.add(notEqual);
+                    }
                     case EQUAL -> {
                         Predicate equal = criteriaBuilder.equal(root.get(requestDto.getFilterBy()), requestDto.getValue());
                         predicateList.add(equal);

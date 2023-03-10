@@ -13,6 +13,9 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pgp.flightfinder.model.SearchRequestDTO.Operation.JOIN;
+import static pgp.flightfinder.model.SearchRequestDTO.Operation.NOT_EQUAL;
+
 @Service
 public class FlightService {
 
@@ -41,9 +44,9 @@ public class FlightService {
         withDestination.addAll(requestDTO.getSearchRequestDTOList());
         Specification<Flight> specifications = filterSpecification
                 .getSearchSpecification(requestDTO.getFrom(), withDestination);
-        Iterable<Flight> directflights = flightRepository.findAll(specifications);
+        Iterable<Flight> directFlights = flightRepository.findAll(specifications);
         List<FlightDTO> directFlightsDTOs = new ArrayList<>();
-        for (Flight flight : directflights) {
+        for (Flight flight : directFlights) {
             directFlightsDTOs.add(new FlightDTO(
                     List.of(flight.getFlight_id()),
                     flight.getDepartureAt(),
@@ -57,17 +60,24 @@ public class FlightService {
 
     public List<FlightDTO> findConnectingFlights(RequestDTO requestDTO) {
 
-
+        requestDTO.getTo().setOperation(NOT_EQUAL);
+            List<SearchRequestDTO> withoutDestination = new ArrayList<>();
+            withoutDestination.add(requestDTO.getTo());
+            withoutDestination.addAll(requestDTO.getSearchRequestDTOList());
         Specification<Flight> departureSpecification = filterSpecification
-                .getSearchSpecification(requestDTO.getFrom(), requestDTO.getSearchRequestDTOList());
+                .getSearchSpecification(requestDTO.getFrom(), withoutDestination);
         List<Flight> departures = flightRepository.findAll(departureSpecification);
 
+        requestDTO.getTo().setOperation(JOIN);
+        requestDTO.getFrom().setOperation(NOT_EQUAL);
+            List<SearchRequestDTO> withoutDeparture = new ArrayList<>();
+            withoutDeparture.add(requestDTO.getFrom());
+            withoutDeparture.addAll(requestDTO.getSearchRequestDTOList());
         Specification<Flight> arrivalSpecification = filterSpecification
-                .getSearchSpecification(requestDTO.getTo(), requestDTO.getSearchRequestDTOList());
+                .getSearchSpecification(requestDTO.getTo(), withoutDeparture);
         List<Flight> arrivals = flightRepository.findAll(arrivalSpecification);
 
         List<FlightDTO> connectingFlights = new ArrayList<>();
-
         for (Flight departure : departures) {
             for (Flight arrival : arrivals) {
 
