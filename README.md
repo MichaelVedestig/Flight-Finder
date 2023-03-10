@@ -35,6 +35,10 @@ To search the database for flights send POST request to "flight/filter" with dat
 ```
 This will return a list of FlightDTOs.
 
+Valid Operations are:
+
+		"EQUALS", "LIKE", "IN", "GREATER_THAN", "LESS_THAN", "BETWEEN", "JOIN", "NOT_EQUAL"
+
 Valid filter keys for route table are: 
 
 		"route_id" 
