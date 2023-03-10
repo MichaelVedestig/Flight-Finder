@@ -2,7 +2,7 @@
 API for searching and booking flights
 
 To search the database for flights send POST request to "flight/filter" with data structure consisting of two mandatory requestDTOs for the departure airport and arrival airport and an list of optional requestDTOs:
-
+```
 {
     "from" :
     {
@@ -32,7 +32,7 @@ To search the database for flights send POST request to "flight/filter" with dat
         }
     ]
 }
-
+```
 This will return a list of FlightDTOs.
 
 Valid filter keys for route table are: "route_id" ,"departureDestination" and "arrivalDestination"
@@ -51,13 +51,18 @@ Valid filter keys for flight table are:
                     "child"
                     
 To book a flight, a user must be registered by POST request to "/user/register" with structure:
+
+```
   {
         "email" : 
         "password" :
         "role" :
    }  
-   
+```
+
 Once registered an order can be sent to by POST request to  "/flight/booking" with structure:
+
+```  
   {
         "email": "mike@mail.com",
         "flightDTO" : {
@@ -76,9 +81,11 @@ Once registered an order can be sent to by POST request to  "/flight/booking" wi
     "adults" : "2",
     "children" : 1
 }
+```
 
 This will return a Booking:
 
+```
 {
     "booking_id": "N92JQQ",
     "bookingDetails": {
@@ -102,16 +109,22 @@ This will return a Booking:
     "total": 491.88,
     "currency": "SEK"
 }
+```
 
 To see your users account info, including stored bookings, the user needs to login by POST request to "/user/login" with structure:
+
+```
 {
     "email" :
     "password" :
 }
+```
+
 This will return JWT
 
 You can the send GET request with said Bearer token to "/user" which will return all information on the user, except the encoded password:
 
+```
 {
     "id": 1,
     "email": "mike@mail.com",
@@ -119,7 +132,8 @@ You can the send GET request with said Bearer token to "/user" which will return
     "tokens": [
         {
             "id": 1,
-            "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWtlQG1haWwuY29tIiwiaWF0IjoxNjc4NDI4NDA3LCJleHAiOjE2Nzg1MTQ4MDd9.GPtwNtf-n5BIXtCqmc_xfSJBYFI3ZMxyxf6ZpvBQ5sw",
+            "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtaWtlQG1haWwuY29tIiwiaWF0IjoxNjc4NDI4NDA3LCJleHAiOjE2Nzg1MTQ4MDd9.GPtwNtf-			n5BIXtCqmc_xfSJBYFI3ZMxyxf6ZpvBQ5sw",
+			
             "tokenType": "BEARER",
             "revoked": false,
             "expired": false
@@ -175,3 +189,4 @@ You can the send GET request with said Bearer token to "/user" which will return
         }
     ]
 }
+```
