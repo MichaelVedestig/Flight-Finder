@@ -35,7 +35,7 @@ To search the database for flights send POST request to "flight/filter" with dat
 ```
 This will return a list of FlightDTOs.
 
-Valid filter keys for route table are: "route_id" ,"departureDestination" and "arrivalDestination"
+Valid filter keys for route table are: "route_id" ,"departureDestination"(I did not name this...) and "arrivalDestination"
 
 Valid filter keys for flight table are:
             
