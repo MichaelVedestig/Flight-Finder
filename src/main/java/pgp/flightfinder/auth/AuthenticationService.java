@@ -65,7 +65,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var user = userRepository.findByEmail(request.getEmail());
         var jwt = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwt);
@@ -73,7 +73,7 @@ public class AuthenticationService {
     }
 
     public UserDTO getUser(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        return new UserDTO(user.getId(), user.getEmail(), user.getRole(), user.getTokens());
+        User user = userRepository.findByEmail(email);
+        return new UserDTO(user.getId(), user.getEmail(), user.getRole(), user.getTokens(), user.getBookings());
     }
 }

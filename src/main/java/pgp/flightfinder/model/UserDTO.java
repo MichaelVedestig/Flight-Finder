@@ -9,6 +9,7 @@ public record UserDTO(
         Integer id,
         String email,
         Role role,
-        List<Token> tokens
+        List<Token> tokens,
+        List<Booking> bookings
 ) {
 }

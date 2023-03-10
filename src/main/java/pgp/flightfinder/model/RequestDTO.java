@@ -9,5 +9,7 @@ import java.util.List;
 @Setter
 public class RequestDTO {
 
+    private SearchRequestDTO from;
+    private SearchRequestDTO to;
     private List<SearchRequestDTO> searchRequestDTOList;
 }

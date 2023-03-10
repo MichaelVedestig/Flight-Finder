@@ -12,10 +12,17 @@ import java.util.List;
 @Service
 public class FilterSpecification<T> {
 
-    public Specification<T> getSearchSpecification(List<SearchRequestDTO> searchRequestDTOList){
+    public Specification<T> getSearchSpecification(SearchRequestDTO airport, List<SearchRequestDTO> searchRequestDTOList){
         return (root, query, criteriaBuilder) -> {
 
             List<Predicate> predicateList = new ArrayList<>();
+            predicateList.add(
+                    criteriaBuilder.equal(root
+                    .join(airport.getJoinTable())
+                    .get(airport.getFilterBy()),
+                    airport.getValue()));
+
+
             for(SearchRequestDTO requestDto : searchRequestDTOList){
 
                 switch (requestDto.getOperation()) {
@@ -47,7 +54,13 @@ public class FilterSpecification<T> {
                         predicateList.add(between);
                     }
                     case JOIN -> {
-                        Predicate join = criteriaBuilder.equal(root.join(requestDto.getJoinTable()).get(requestDto.getFilterBy()), requestDto.getValue());
+                        Predicate join;
+                        if (requestDto.getFilterBy().equals("adult") || requestDto.getFilterBy().equals("child")){
+                            join = criteriaBuilder.lessThan(root.join(requestDto.getJoinTable()).get(requestDto.getFilterBy()), requestDto.getValue());
+                        }
+                        else {
+                            join = criteriaBuilder.equal(root.join(requestDto.getJoinTable()).get(requestDto.getFilterBy()), requestDto.getValue());
+                        }
                         predicateList.add(join);
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + "");
